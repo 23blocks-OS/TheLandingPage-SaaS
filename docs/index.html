@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="23Blocks Deploy - Open-source, self-hostable deployment platform for static sites. Like Netlify or Vercel, but you control the infrastructure.">
+    <meta name="keywords" content="deployment platform, static site hosting, netlify alternative, vercel alternative, self-hosted, open source">
+    <title>23Blocks Deploy - Self-Hostable Deployment Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            padding: 80px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            color: #2d3748;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+
+        .feature-card p {
+            color: #718096;
+            line-height: 1.8;
+        }
+
+        .how-it-works {
+            background: #f7fafc;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+
+        .step h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+
+        .step p {
+            color: #718096;
+            line-height: 1.8;
+        }
+
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .code-block pre {
+            margin: 0;
+        }
+
+        .use-cases {
+            background: white;
+        }
+
+        .use-case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .use-case {
+            padding: 30px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .use-case h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        .use-case p {
+            color: #718096;
+        }
+
+        .pricing {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .pricing h2 {
+            color: white;
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .pricing-card {
+            background: white;
+            color: #2d3748;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .pricing-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .pricing-features li:before {
+            content: "✓";
+            color: #48bb78;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
+        .footer {
+            background: #2d3748;
+            color: white;
+            padding: 60px 20px 20px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #4a5568;
+            color: #cbd5e0;
+        }
+
+        .stats {
+            background: #f7fafc;
+            padding: 60px 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-item p {
+            color: #718096;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>🚀 23Blocks Deploy</h1>
+            <p>Open-Source, Self-Hostable Deployment Platform for Static Sites</p>
+            <p style="font-size: 1.1rem; opacity: 0.8;">Like Netlify or Vercel, but you control the infrastructure</p>
+            <div class="cta-buttons">
+                <a href="https://github.com/23blocks-OS/TheLandingPage-SaaS" class="btn btn-primary">Get Started</a>
+                <a href="#features" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>100%</h3>
+                    <p>Open Source</p>
+                </div>
+                <div class="stat-item">
+                    <h3>MIT</h3>
+                    <p>License</p>
+                </div>
+                <div class="stat-item">
+                    <h3>∞</h3>
+                    <p>Deployments</p>
+                </div>
+                <div class="stat-item">
+                    <h3>$0</h3>
+                    <p>Platform Cost</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <div class="container">
+            <h2 class="section-title">Why 23Blocks Deploy?</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Lightning Fast</h3>
+                    <p>Deploy your sites in seconds. Powered by CloudFront CDN for instant global delivery.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Self-Hosted</h3>
+                    <p>Bring your own AWS keys. You control the infrastructure, data, and costs.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💻</div>
+                    <h3>Open Source</h3>
+                    <p>Fully open-source under MIT license. Modify, customize, and contribute.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Custom Domains</h3>
+                    <p>Use your own domain with automatic SSL/TLS certificates and wildcard subdomains.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛠️</div>
+                    <h3>CLI Tool</h3>
+                    <p>Deploy from your terminal with a simple command. Integrate with CI/CD pipelines.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Dashboard</h3>
+                    <p>Manage all your projects and deployments from a beautiful web interface.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="section how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Deploy Infrastructure</h3>
+                    <p>Use Terraform to deploy AWS resources (S3, CloudFront, Route53) in your account.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Setup Platform</h3>
+                    <p>Configure and deploy the Next.js platform with your database.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Create Projects</h3>
+                    <p>Use the dashboard or CLI to create projects and get unique subdomains.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Deploy Sites</h3>
+                    <p>Run <code>23blocks-deploy deploy</code> and your site is live instantly.</p>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <pre># Install CLI
+npm install -g @23blocks/deploy-cli
+
+# Login
+23blocks-deploy login
+
+# Deploy your site
+cd your-project
+npm run build
+23blocks-deploy deploy
+
+# ✅ Your site is live at https://yourproject.yourdomain.com</pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="section use-cases">
+        <div class="container">
+            <h2 class="section-title">Perfect For</h2>
+            <div class="use-case-grid">
+                <div class="use-case">
+                    <h3>🏢 Dev Agencies</h3>
+                    <p>Host all your client sites on your own infrastructure. White-label solution for agencies.</p>
+                </div>
+                <div class="use-case">
+                    <h3>👨‍💻 Solo Developers</h3>
+                    <p>Deploy personal projects without vendor lock-in. Pay only for AWS resources you use.</p>
+                </div>
+                <div class="use-case">
+                    <h3>🚀 Startups</h3>
+                    <p>Build your own hosting platform on top of this. Full control and customization.</p>
+                </div>
+                <div class="use-case">
+                    <h3>🏛️ Enterprise</h3>
+                    <p>Keep data in your AWS account. Meet compliance and security requirements.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="section pricing">
+        <div class="container">
+            <h2 class="section-title">Transparent Pricing</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 40px; opacity: 0.9;">Pay only for AWS resources. No hidden fees.</p>
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <h3>Platform</h3>
+                    <div class="price">$0</div>
+                    <p>Forever Free</p>
+                    <ul class="pricing-features">
+                        <li>Open source codebase</li>
+                        <li>Unlimited deployments</li>
+                        <li>Unlimited projects</li>
+                        <li>Self-hosted</li>
+                        <li>Community support</li>
+                    </ul>
+                </div>
+                <div class="pricing-card">
+                    <h3>AWS Resources</h3>
+                    <div class="price">~$30</div>
+                    <p>Per Month</p>
+                    <ul class="pricing-features">
+                        <li>S3 storage (~$5)</li>
+                        <li>CloudFront CDN (~$10)</li>
+                        <li>Route53 DNS (~$1)</li>
+                        <li>Database (~$15)</li>
+                        <li>Pay only for what you use</li>
+                    </ul>
+                </div>
+                <div class="pricing-card">
+                    <h3>High Traffic</h3>
+                    <div class="price">~$100</div>
+                    <p>Per Month</p>
+                    <ul class="pricing-features">
+                        <li>Higher bandwidth</li>
+                        <li>More storage</li>
+                        <li>Global distribution</li>
+                        <li>Still cheaper than alternatives</li>
+                        <li>No platform fees</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section" style="background: #f7fafc; text-align: center;">
+        <div class="container">
+            <h2 class="section-title">Ready to Deploy?</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 40px; color: #718096;">Get started in minutes. No credit card required.</p>
+            <div class="cta-buttons">
+                <a href="https://github.com/23blocks-OS/TheLandingPage-SaaS" class="btn btn-primary" style="color: #667eea;">View on GitHub</a>
+                <a href="setup.html" class="btn btn-secondary" style="background: #667eea; color: white; border: none;">Setup Guide</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>23Blocks Deploy</h3>
+                <p>Open-source deployment platform for the modern web.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Documentation</h3>
+                <ul>
+                    <li><a href="setup.html">Setup Guide</a></li>
+                    <li><a href="aws-setup.html">AWS Configuration</a></li>
+                    <li><a href="self-hosting.html">Self-Hosting</a></li>
+                    <li><a href="https://github.com/23blocks-OS/TheLandingPage-SaaS">GitHub</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#use-cases">Use Cases</a></li>
+                    <li><a href="https://github.com/23blocks-OS/TheLandingPage-SaaS/issues">Support</a></li>
+                    <li><a href="https://github.com/23blocks-OS/TheLandingPage-SaaS/blob/main/CONTRIBUTING.md">Contributing</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="https://github.com/23blocks-OS/TheLandingPage-SaaS/blob/main/LICENSE">MIT License</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 23Blocks. Open source and free forever.</p>
+        </div>
+    </footer>
+</body>
+</html>
