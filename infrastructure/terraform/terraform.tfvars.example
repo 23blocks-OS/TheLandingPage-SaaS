@@ -1,0 +1,32 @@
+# AWS Configuration
+aws_region  = "us-east-1"
+environment = "production"
+
+# Project Configuration
+project_name = "23blocks-deploy"
+
+# Domain Configuration (optional)
+# Leave domain_name empty to use CloudFront's default domain
+# If you provide a domain, ensure you own it and can update nameservers
+domain_name = ""  # Example: "23blocks.net" will create *.23blocks.net
+
+# CloudFront Configuration
+cloudfront_price_class = "PriceClass_100"  # Options: PriceClass_100, PriceClass_200, PriceClass_All
+
+# Database Configuration
+use_dynamodb = false  # Set to true to use DynamoDB instead of PostgreSQL
+
+# Security Configuration
+enable_waf = false  # Set to true to enable AWS WAF (additional cost)
+
+# Upload Configuration
+max_upload_size_mb = 100  # Maximum upload size in MB
+
+# Retention Configuration
+deployment_retention_days = 90  # Number of days to keep old deployments
+
+# Additional Tags
+tags = {
+  Owner = "DevOps Team"
+  CostCenter = "Engineering"
+}

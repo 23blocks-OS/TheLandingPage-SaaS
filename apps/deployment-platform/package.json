@@ -1,0 +1,53 @@
+{
+  "name": "deployment-platform",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "clean": "rm -rf .next .turbo node_modules"
+  },
+  "dependencies": {
+    "next": "14.2.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "@prisma/client": "^5.18.0",
+    "next-auth": "^4.24.7",
+    "bcryptjs": "^2.4.3",
+    "zod": "^3.23.8",
+    "@aws-sdk/client-s3": "^3.621.0",
+    "@aws-sdk/s3-request-presigner": "^3.621.0",
+    "@aws-sdk/client-cloudfront": "^3.621.0",
+    "nanoid": "^5.0.7",
+    "mime-types": "^2.1.35",
+    "archiver": "^7.0.1",
+    "formidable": "^3.5.1",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.4.0",
+    "lucide-react": "^0.424.0",
+    "date-fns": "^3.6.0",
+    "react-dropzone": "^14.2.3",
+    "sonner": "^1.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.15",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/formidable": "^3.4.5",
+    "@types/mime-types": "^2.1.4",
+    "@types/archiver": "^6.0.2",
+    "typescript": "^5.5.4",
+    "tailwindcss": "^3.4.7",
+    "postcss": "^8.4.40",
+    "autoprefixer": "^10.4.20",
+    "prisma": "^5.18.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.5"
+  }
+}
