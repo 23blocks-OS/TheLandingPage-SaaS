@@ -16,7 +16,8 @@ An open-source, self-hostable deployment platform for static sites - like Netlif
 
 This monorepo includes:
 
-- `apps/deployment-platform` - Next.js web dashboard
+- `apps/deployment-platform` - Next.js web dashboard for users
+- `apps/admin-dashboard` - Admin dashboard for platform management
 - `packages/deploy-cli` - CLI tool for publishing sites
 - `infrastructure/terraform` - AWS infrastructure as code
 
@@ -98,6 +99,34 @@ pnpm dev
 ```
 
 Visit `http://localhost:3000` to see the dashboard.
+
+## 🛡️ Admin Dashboard
+
+The admin dashboard provides a comprehensive interface for platform management:
+
+### Features
+- **User Management**: View, search, and manage all users
+- **Deployment Monitoring**: Track all deployments across the platform
+- **Job Queue**: Trigger and monitor background jobs
+- **System Metrics**: Monitor AWS usage, database health, and platform performance
+- **Audit Logging**: Complete audit trail of all admin actions
+
+### Setup
+
+```bash
+# Navigate to admin dashboard
+cd apps/admin-dashboard
+
+# Create first admin user
+npx tsx scripts/create-admin.ts
+
+# Start admin dashboard (runs on port 3001)
+pnpm dev
+```
+
+Visit `http://localhost:3001` to access the admin dashboard.
+
+For detailed documentation, see [apps/admin-dashboard/README.md](./apps/admin-dashboard/README.md)
 
 ## 📤 Publishing a Site
 

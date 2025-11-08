@@ -1,0 +1,292 @@
+// Admin Dashboard Prisma Schema
+// This schema includes all models from the deployment platform plus admin-specific models
+// Both apps share the same database
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../node_modules/.prisma/client-admin"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ========================================
+// Deployment Platform Models
+// ========================================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts     Account[]
+  sessions     Session[]
+  projects     Project[]
+  deployments  Deployment[]
+  apiKeys      ApiKey[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  subdomain   String   @unique
+  userId      String
+  description String?
+
+  customDomain String?
+  buildCommand String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deployments Deployment[]
+
+  @@index([userId])
+  @@map("projects")
+}
+
+model Deployment {
+  id              String   @id @default(cuid())
+  projectId       String
+  userId          String
+
+  status          DeploymentStatus @default(PENDING)
+  url             String
+  s3Path          String
+  subdomain       String?
+
+  buildLog        String?  @db.Text
+  errorMessage    String?  @db.Text
+  fileCount       Int      @default(0)
+  totalSize       Int      @default(0)
+
+  commitHash      String?
+  commitMessage   String?
+  branch          String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  publishedAt     DateTime?
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([userId])
+  @@index([status])
+  @@map("deployments")
+}
+
+enum DeploymentStatus {
+  PENDING
+  UPLOADING
+  PROCESSING
+  BUILDING
+  DEPLOYING
+  READY
+  FAILED
+  CANCELLED
+}
+
+model ApiKey {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  key         String   @unique
+  lastUsedAt  DateTime?
+  expiresAt   DateTime?
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("api_keys")
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  action      String
+  resource    String?
+  metadata    Json?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// ========================================
+// Admin-Specific Models
+// ========================================
+
+model Admin {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String    // Hashed with bcrypt
+  name          String?
+  role          AdminRole @default(ADMIN)
+  isActive      Boolean   @default(true)
+  lastLoginAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sessions      AdminSession[]
+  auditLogs     AdminAuditLog[]
+
+  @@map("admins")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  SUPPORT
+  VIEWER
+}
+
+model AdminSession {
+  id           String   @id @default(cuid())
+  adminId      String
+  sessionToken String   @unique
+  ipAddress    String?
+  userAgent    String?
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+
+  admin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId])
+  @@map("admin_sessions")
+}
+
+model AdminAuditLog {
+  id          String   @id @default(cuid())
+  adminId     String
+  action      String
+  resource    String?
+  details     Json?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  admin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("admin_audit_logs")
+}
+
+model SystemMetric {
+  id          String   @id @default(cuid())
+  metric      String   // e.g., "deployments.total", "users.active"
+  value       Float
+  timestamp   DateTime @default(now())
+  metadata    Json?
+
+  @@index([metric])
+  @@index([timestamp])
+  @@map("system_metrics")
+}
+
+model JobQueue {
+  id          String    @id @default(cuid())
+  type        JobType
+  payload     Json
+  status      JobStatus @default(PENDING)
+  attempts    Int       @default(0)
+  maxAttempts Int       @default(3)
+  error       String?   @db.Text
+  scheduledAt DateTime  @default(now())
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([status])
+  @@index([type])
+  @@index([scheduledAt])
+  @@map("job_queue")
+}
+
+enum JobType {
+  CLEANUP_OLD_DEPLOYMENTS
+  INVALIDATE_CACHE
+  SEND_NOTIFICATIONS
+  GENERATE_REPORTS
+  SYNC_METRICS
+  BACKUP_DATABASE
+  REBUILD_DEPLOYMENT
+}
+
+enum JobStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model SystemSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String   @db.Text
+  type      String   // string, number, boolean, json
+  updatedBy String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("system_settings")
+}
